@@ -111,7 +111,7 @@
       }
 
       try {
-        const response = await fetch('http://localhost:5000/add_record', {
+        const response = await fetch('https://heroku-ryby-apka-c565d359bf66.herokuapp.com/add_record', {
           method: 'POST',
           body: formData
         });
@@ -123,41 +123,3 @@
           loadRecords(); // Načtení aktuálních záznamů
         } else {
           const errorData = await response.json();
-          alert(`Chyba: ${errorData.message}`);
-        }
-      } catch (error) {
-        console.error("Chyba při odesílání dat:", error);
-        alert("Nastala chyba při odesílání záznamu!");
-      }
-    });
-
-    // Funkce pro načítání záznamů z backendu
-    async function loadRecords() {
-      try {
-        const response = await fetch('http://localhost:5000/get_records');
-        const records = await response.json();
-
-        // Vyčištění seznamu
-        recordsList.innerHTML = '';
-        records.forEach(record => {
-          const listItem = document.createElement('li');
-          listItem.className = 'list-group-item';
-          listItem.innerHTML = `
-            <strong>${record.name}</strong> - ${record.fish_type} (${record.weight} kg, ${record.length} cm) ulovený dne ${record.date} v lokalitě ${record.location}.
-            <br>Nástraha: ${record.bait}, Strategie: ${record.strategy}, Montáž: ${record.setup}.
-            <br>Poznámka: ${record.note || "Žádná poznámka"}.
-            ${record.photo_filename ? `<br><img src="http://localhost:5000/uploaded_photos/${record.photo_filename}" alt="Fotografie úlovku" style="max-width:200px;">` : ''}
-          `;
-          recordsList.appendChild(listItem);
-        });
-      } catch (error) {
-        console.error("Chyba při načítání záznamů:", error);
-        alert("Nastala chyba při načítání záznamů!");
-      }
-    }
-
-    // Automatické načtení záznamů při načtení stránky
-    window.addEventListener('load', loadRecords);
-  </script>
-</body>
-</html>
